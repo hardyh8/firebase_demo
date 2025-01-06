@@ -1,0 +1,25 @@
+[debug] [2025-01-06T14:53:40.066Z] ----------------------------------------------------------------------
+[debug] [2025-01-06T14:53:40.068Z] Command:       H:\Software\Node js\Installed\node.exe C:\Users\Hardik\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js apps:create ios firebase_demo (ios) --bundle-id=com.example.firebase_demo --json --project=fir-demo-3739c
+[debug] [2025-01-06T14:53:40.068Z] CLI Version:   13.24.1
+[debug] [2025-01-06T14:53:40.068Z] Platform:      win32
+[debug] [2025-01-06T14:53:40.068Z] Node Version:  v20.10.0
+[debug] [2025-01-06T14:53:40.068Z] Time:          Mon Jan 06 2025 20:23:40 GMT+0530 (India Standard Time)
+[debug] [2025-01-06T14:53:40.068Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-01-06T14:53:40.121Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"flutter"}
+[debug] [2025-01-06T14:53:40.124Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-01-06T14:53:40.125Z] > authorizing via signed-in user (dhameliah48@gmail.com)
+[info] Create your IOS app in project fir-demo-3739c:
+[debug] [2025-01-06T14:53:40.128Z] Checked if tokens are valid: true, expires at: 1736178677108
+[debug] [2025-01-06T14:53:40.128Z] Checked if tokens are valid: true, expires at: 1736178677108
+[debug] [2025-01-06T14:53:40.129Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1beta1/projects/fir-demo-3739c/iosApps [none]
+[debug] [2025-01-06T14:53:40.129Z] >>> [apiv2][body] POST https://firebase.googleapis.com/v1beta1/projects/fir-demo-3739c/iosApps {"displayName":"firebase_demo (ios)","bundleId":"com.example.firebase_demo"}
+[debug] [2025-01-06T14:53:41.222Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1beta1/projects/fir-demo-3739c/iosApps 400
+[debug] [2025-01-06T14:53:41.223Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1beta1/projects/fir-demo-3739c/iosApps {"error":{"code":400,"message":"Request contains an invalid argument.","status":"INVALID_ARGUMENT"}}
+[debug] [2025-01-06T14:53:41.223Z] Request to https://firebase.googleapis.com/v1beta1/projects/fir-demo-3739c/iosApps had HTTP Error: 400, Request contains an invalid argument.
+[debug] [2025-01-06T14:53:41.224Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/fir-demo-3739c/iosApps had HTTP Error: 400, Request contains an invalid argument.
+    at responseToError (C:\Users\Hardik\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:52:12)
+    at RetryOperation._fn (C:\Users\Hardik\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to create iOS app for project fir-demo-3739c. See firebase-debug.log for more info.

@@ -1,7 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'features/onboarding/domain/bloc/auth_bloc.dart';
 import 'firebase_options.dart';
+import 'routing/router.dart';
+import 'routing/router_helper.dart';
+import 'routing/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,13 +21,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      routeInformationParser: router.routeInformationParser,
+      routeInformationProvider: router.routeInformationProvider,
+      routerDelegate: router.routerDelegate,
     );
   }
 }
@@ -37,14 +45,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,18 +56,39 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            BlocConsumer<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state is SignOutFailure) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed ${state.reason}')),
+                  );
+                } else if (state is SignOutSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Signout Success!')),
+                  );
+                  RouterHelper.go(context, AppRoutes.signin.name);
+                }
+              },
+              builder: (context, state) {
+                if (state is SignOutLoading) {
+                  return const CircularProgressIndicator();
+                }
+                return const Text(
+                  'You have pushed the button this many times:',
+                );
+              },
             ),
             Text(
-              '$_counter',
+              '0',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          context.read<AuthBloc>().add(OnSignOut());
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
