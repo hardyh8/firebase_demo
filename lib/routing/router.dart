@@ -6,7 +6,6 @@ import 'domain/refresh_schema.dart';
 import 'routes.dart';
 
 final GoRouter router = GoRouter(
-    debugLogDiagnostics: true,
     initialLocation: AppRoutes.signin.path,
     refreshListenable:
         GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges()),

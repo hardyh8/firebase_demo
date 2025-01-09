@@ -14,83 +14,86 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(),
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: BlocBuilder<AuthBloc, AuthState>(
-            buildWhen: (previous, current) {
-              return current is SignIn || current is SignUp;
-            },
-            builder: (context, selectedState) {
-              if (selectedState is SignIn) {
-                return const Text('Sign In');
-              } else if (selectedState is SignUp) {
-                return const Text('Sign Up');
-              }
-              return const Text('no');
-            },
-          ),
+        title: BlocBuilder<AuthBloc, AuthState>(
+          buildWhen: (previous, current) {
+            return current is SignIn || current is SignUp;
+          },
+          builder: (context, selectedState) {
+            if (selectedState is SignIn) {
+              return const Text('Sign In');
+            } else if (selectedState is SignUp) {
+              return const Text('Sign Up');
+            }
+            return const Text('no');
+          },
         ),
-        body: SafeArea(
-          child: SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    BlocBuilder<AuthBloc, AuthState>(
-                      buildWhen: (previous, current) {
-                        return current is SignIn || current is SignUp;
-                      },
-                      builder: (context, state) {
-                        return Text(
-                          state is SignIn ? 'Welcome Back' : 'Welcome',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Use your email and password  \nor continue with social media',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.grey1),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                    const SignInForm(),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SocalCard(
-                          icon: SvgPicture.string(SvgImages.googleIcon),
-                          press: () {},
+      ),
+      body: SafeArea(
+        child: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (previous, current) {
+                      return current is SignIn || current is SignUp;
+                    },
+                    builder: (context, state) {
+                      return Text(
+                        state is SignIn ? 'Welcome Back' : 'Welcome',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: SocalCard(
-                            icon: SvgPicture.string(SvgImages.facebookIcon),
-                            press: () {},
-                          ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Use your email and password  \nor continue with social media',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: AppColors.grey1),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                  const SignInForm(),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SocalCard(
+                        icon: SvgPicture.string(SvgImages.googleIcon),
+                        press: () {
+                          context.read<AuthBloc>().add(OnSigninWithGoogle());
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: SocalCard(
+                          icon: SvgPicture.string(SvgImages.facebookIcon),
+                          press: () {
+                            context
+                                .read<AuthBloc>()
+                                .add(OnSigninWithFacebook());
+                          },
                         ),
-                        SocalCard(
-                          icon: SvgPicture.string(SvgImages.twitterIcon),
-                          press: () {},
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    const NoAccountText(),
-                  ],
-                ),
+                      ),
+                      SocalCard(
+                        icon: SvgPicture.string(SvgImages.twitterIcon),
+                        press: () {},
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const NoAccountText(),
+                ],
               ),
             ),
           ),

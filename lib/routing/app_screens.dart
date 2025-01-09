@@ -11,7 +11,10 @@ class AppScreens {
   static final signin = GoRoute(
     path: AppRoutes.signin.path,
     name: AppRoutes.signin.name,
-    builder: (context, state) => const SignInScreen(),
+    builder: (context, state) => BlocProvider(
+      create: (context) => AuthBloc(),
+      child: const SignInScreen(),
+    ),
   );
 
   static final home = GoRoute(
