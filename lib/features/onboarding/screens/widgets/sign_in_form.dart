@@ -7,6 +7,7 @@ import '../../../../config/svg_imgs.dart';
 import '../../../../routing/router_helper.dart';
 import '../../../../routing/routes.dart';
 import '../../domain/bloc/auth_bloc.dart';
+import 'forget_psw_text.dart';
 
 const authOutlineInputBorder = OutlineInputBorder(
   borderSide: BorderSide(color: AppColors.grey1),
@@ -27,7 +28,7 @@ class _SignInFormState extends State<SignInForm> {
   @override
   void initState() {
     super.initState();
-    emailController.text = 'admin@gmail.com';
+    emailController.text = 'dhameliah48@gmail.com';
     pswController.text = 'Qwasd@135';
   }
 
@@ -89,42 +90,48 @@ class _SignInFormState extends State<SignInForm> {
           const SizedBox(height: 8),
           BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
-              if (state is SignUpWithEmailSuccess) {
+              if (state is AuthSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Success!')),
                 );
                 RouterHelper.go(context, AppRoutes.home.name);
               }
-              if (state is SignUpWithEmailFailure) {
+              if (state is AuthFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.reason)),
                 );
               }
             },
             builder: (context, state) {
-              if (state is SignUpWithEmailLoading) {
+              if (state is AuthLoading) {
                 return const CircularProgressIndicator();
               }
-              return ElevatedButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(OnSigninWithEmail(
-                        email: emailController.text.trim(),
-                        password: pswController.text.trim(),
-                      ));
-                },
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 48),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
+              return Column(
+                spacing: 18,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(OnSigninWithEmail(
+                            email: emailController.text.trim(),
+                            password: pswController.text.trim(),
+                          ));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                      ),
+                    ),
+                    child: const Text('Continue'),
                   ),
-                ),
-                child: const Text('Continue'),
+                  if (state is SignIn) const ForgetPasswordText()
+                ],
               );
             },
-          )
+          ),
         ],
       ),
     );

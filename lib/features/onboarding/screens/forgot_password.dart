@@ -1,9 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+import '../../../config/app_colors.dart';
+import '../../../routing/router_helper.dart';
+import '../../../routing/routes.dart';
+import '../domain/bloc/auth_bloc.dart';
 
-  ForgotPasswordScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
+  @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+
+  @override
+  void initState() {
+    emailController.text = 'dhameliah48@gmail.com';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,8 +65,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Form(
-                    key: _formKey,
+                    key: formKey,
                     child: TextFormField(
+                      controller: emailController,
                       decoration: const InputDecoration(
                         hintText: 'Email',
                         filled: true,
@@ -57,75 +83,40 @@ class ForgotPasswordScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
+                BlocListener<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                    if (state is ForgetPasswordSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text('Reset password link sent to email!')),
+                      );
+                      RouterHelper.go(context, AppRoutes.signin.name);
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    backgroundColor: const Color(0xFF00BF6D),
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: const StadiumBorder(),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(OnForgetPassword(
+                            email: emailController.text.trim(),
+                          ));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                      ),
+                    ),
+                    child: const Text('Next'),
                   ),
-                  child: const Text('Next'),
                 ),
               ],
             ),
           );
         }),
       ),
-    );
-  }
-}
-
-class LogoWithTitle extends StatelessWidget {
-  final String title, subText;
-  final List<Widget> children;
-
-  const LogoWithTitle(
-      {super.key,
-      required this.title,
-      this.subText = '',
-      required this.children});
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: LayoutBuilder(builder: (context, constraints) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            children: [
-              SizedBox(height: constraints.maxHeight * 0.2),
-              Text(
-                title,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  subText,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    height: 1.5,
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .color!
-                        .withAlpha(163),
-                  ),
-                ),
-              ),
-              ...children,
-            ],
-          ),
-        );
-      }),
     );
   }
 }

@@ -9,16 +9,8 @@ import 'widgets/no_ac_text.dart';
 import 'widgets/sign_in_form.dart';
 import 'widgets/social_card.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
-
-  @override
-  State<SignInScreen> createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
-  var signInText = '';
-  var welcomeText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -28,22 +20,17 @@ class _SignInScreenState extends State<SignInScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: BlocSelector<AuthBloc, AuthState, int>(
-            selector: (state) {
-              if (state is SignIn) {
-                return 1;
-              } else if (state is SignUp) {
-                return 2;
-              }
-              return 0;
+          title: BlocBuilder<AuthBloc, AuthState>(
+            buildWhen: (previous, current) {
+              return current is SignIn || current is SignUp;
             },
             builder: (context, selectedState) {
-              if (selectedState == 1) {
-                signInText = 'Sign In';
-              } else if (selectedState == 2) {
-                signInText = 'Sign Up';
+              if (selectedState is SignIn) {
+                return const Text('Sign In');
+              } else if (selectedState is SignUp) {
+                return const Text('Sign Up');
               }
-              return Text(signInText);
+              return const Text('no');
             },
           ),
         ),
@@ -56,23 +43,13 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: Column(
                   children: [
                     const SizedBox(height: 16),
-                    BlocSelector<AuthBloc, AuthState, int>(
-                      selector: (state) {
-                        if (state is SignIn) {
-                          return 1;
-                        } else if (state is SignUp) {
-                          return 2;
-                        }
-                        return 0;
+                    BlocBuilder<AuthBloc, AuthState>(
+                      buildWhen: (previous, current) {
+                        return current is SignIn || current is SignUp;
                       },
                       builder: (context, state) {
-                        if (state == 1) {
-                          welcomeText = 'Welcome Back';
-                        } else if (state == 2) {
-                          welcomeText = 'Welcome!';
-                        }
                         return Text(
-                          welcomeText,
+                          state is SignIn ? 'Welcome Back' : 'Welcome',
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 24,

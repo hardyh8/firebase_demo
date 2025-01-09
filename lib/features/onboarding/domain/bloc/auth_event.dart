@@ -19,3 +19,14 @@ class OnSigninWithEmail extends AuthEvent {
 }
 
 class OnSignOut extends AuthEvent {}
+
+class OnSigninWithGoogle extends AuthEvent {}
+
+class OnSigninWithFacebook extends AuthEvent {}
+
+class OnForgetPassword extends AuthEvent {
+  final String email;
+  OnForgetPassword({
+    this.email = '',
+  });
+}

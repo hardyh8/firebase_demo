@@ -4,32 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../config/app_colors.dart';
 import '../../domain/bloc/auth_bloc.dart';
 
-class NoAccountText extends StatefulWidget {
+class NoAccountText extends StatelessWidget {
   const NoAccountText({
     super.key,
   });
 
   @override
-  State<NoAccountText> createState() => _NoAccountTextState();
-}
-
-class _NoAccountTextState extends State<NoAccountText> {
-  late Widget lastState = const SizedBox.shrink();
-
-  @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthBloc, AuthState, int?>(
-      selector: (state) {
-        if (state is SignIn) {
-          return 1;
-        } else if (state is SignUp) {
-          return 2;
-        }
-        return null;
+    return BlocBuilder<AuthBloc, AuthState>(
+      buildWhen: (previous, current) {
+        return current is SignIn || current is SignUp;
       },
       builder: (context, state) {
-        if (state == 2) {
-          lastState = Row(
+        if (state is SignIn) {
+          return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
@@ -49,8 +37,8 @@ class _NoAccountTextState extends State<NoAccountText> {
               ),
             ],
           );
-        } else if (state == 1) {
-          lastState = Row(
+        } else if (state is SignUp) {
+          return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
@@ -71,7 +59,7 @@ class _NoAccountTextState extends State<NoAccountText> {
             ],
           );
         }
-        return lastState;
+        return const Text('should not render');
       },
     );
   }
