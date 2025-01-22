@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,12 +8,24 @@ import 'firebase_options.dart';
 import 'routing/router.dart';
 import 'routing/router_helper.dart';
 import 'routing/routes.dart';
+import 'utils/get_it_instance.dart';
+import 'utils/logger.dart';
+import 'utils/widgets/custom_snackbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  try {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.debug,
+    );
+    await FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
+  } on Exception catch (e) {
+    logger.d('Exception $e');
+  }
+  initializeDependencies();
   runApp(const MyApp());
 }
 
@@ -59,12 +72,16 @@ class _MyHomePageState extends State<MyHomePage> {
             BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state is SignOutFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Failed ${state.reason}')),
+                  CustomSnackbar.showSnackbar(
+                    context: context,
+                    message: 'Failed ${state.reason}',
+                    type: SnackbarType.error,
                   );
                 } else if (state is SignOutSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Signout Success!')),
+                  CustomSnackbar.showSnackbar(
+                    context: context,
+                    message: 'Signout Success!',
+                    type: SnackbarType.sucess,
                   );
                   RouterHelper.go(context, AppRoutes.signin.name);
                 }

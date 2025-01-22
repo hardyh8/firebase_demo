@@ -6,6 +6,7 @@ import '../../../../config/app_colors.dart';
 import '../../../../config/svg_imgs.dart';
 import '../../../../routing/router_helper.dart';
 import '../../../../routing/routes.dart';
+import '../../../../utils/widgets/custom_snackbar.dart';
 import '../../domain/bloc/auth_bloc.dart';
 import 'forget_psw_text.dart';
 
@@ -91,14 +92,18 @@ class _SignInFormState extends State<SignInForm> {
           BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Success!')),
+                CustomSnackbar.showSnackbar(
+                  context: context,
+                  message: 'Success!',
+                  type: SnackbarType.sucess,
                 );
                 RouterHelper.go(context, AppRoutes.home.name);
               }
               if (state is AuthFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.reason)),
+                CustomSnackbar.showSnackbar(
+                  context: context,
+                  message: state.reason,
+                  type: SnackbarType.error,
                 );
               }
             },

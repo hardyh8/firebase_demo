@@ -6,24 +6,25 @@ import 'domain/refresh_schema.dart';
 import 'routes.dart';
 
 final GoRouter router = GoRouter(
-    initialLocation: AppRoutes.signin.path,
-    refreshListenable:
-        GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges()),
-    routes: [
-      AppScreens.home,
-      AppScreens.signin,
-      AppScreens.forgotPsw,
-    ],
-    redirect: (context, state) {
-      final user = FirebaseAuth.instance.currentUser;
-      final inOnboarding = [
-        AppRoutes.signin.path,
-        AppRoutes.forgotPsw.path,
-      ].contains(state.matchedLocation);
+  initialLocation: AppRoutes.signin.path,
+  refreshListenable:
+      GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges()),
+  routes: [
+    AppScreens.home,
+    AppScreens.signin,
+    AppScreens.forgotPsw,
+  ],
+  redirect: (context, state) {
+    final user = FirebaseAuth.instance.currentUser;
+    final inOnboarding = [
+      AppRoutes.signin.path,
+      AppRoutes.forgotPsw.path,
+    ].contains(state.matchedLocation);
 
-      if (user != null && inOnboarding) return AppRoutes.home.path;
+    if (user != null && inOnboarding) return AppRoutes.home.path;
 
-      if (user == null && !inOnboarding) return AppRoutes.signin.path;
+    if (user == null && !inOnboarding) return AppRoutes.signin.path;
 
-      return null;
-    });
+    return null;
+  },
+);

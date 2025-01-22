@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/app_colors.dart';
 import '../../../routing/router_helper.dart';
 import '../../../routing/routes.dart';
+import '../../../utils/widgets/custom_snackbar.dart';
 import '../domain/bloc/auth_bloc.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -86,10 +87,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
                     if (state is ForgetPasswordSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content:
-                                Text('Reset password link sent to email!')),
+                      CustomSnackbar.showSnackbar(
+                        context: context,
+                        message: 'Reset password link sent to email!',
+                        type: SnackbarType.error,
                       );
                       RouterHelper.go(context, AppRoutes.signin.name);
                     }
