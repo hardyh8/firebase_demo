@@ -75,7 +75,6 @@ class CarDataSource {
         logger.d('upload progress $progress');
         progressController.add(progress);
       });
-
       TaskSnapshot snapshot = await uploadTask;
       String downloadURL = await snapshot.ref.getDownloadURL();
 
@@ -89,10 +88,30 @@ class CarDataSource {
       } else if (e.code == 'unauthorized') {
         logger.d('Unauthorized request. Check App Check.');
       }
+      logger.d('err $e');
       return '';
     } catch (e) {
       progressController.close();
       throw Exception('Error uploading image: $e');
+    }
+  }
+
+  Future<List<String>> getAllCarImageUrls() async {
+    try {
+      final storageRef = FirebaseStorage.instance.ref('car_images');
+
+      final ListResult result = await storageRef.listAll();
+
+      List<String> imageUrls = [];
+      for (var ref in result.items) {
+        final String downloadUrl = await ref.getDownloadURL();
+        imageUrls.add(downloadUrl);
+      }
+
+      return imageUrls;
+    } catch (e) {
+      logger.d('Error fetching image URLs: $e');
+      return [];
     }
   }
 }

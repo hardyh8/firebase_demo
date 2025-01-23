@@ -35,3 +35,10 @@ class DeleteCarData extends CarEvent {
   @override
   List<Object?> get props => [carId];
 }
+
+class OnPickFile extends CarEvent {
+  OnPickFile();
+
+  @override
+  List<Object?> get props => [];
+}

@@ -15,14 +15,17 @@ class OperationInProgress extends CarState {
 
 class OperationSuccess extends CarState {
   final List<CarData> carList;
+  final List<String> networkImageUrls;
 
   OperationSuccess(
     this.carList,
+    this.networkImageUrls,
   );
 
   @override
   List<Object?> get props => [
         carList,
+        networkImageUrls,
       ];
 }
 
@@ -33,4 +36,13 @@ class OperationFailure extends CarState {
 
   @override
   List<Object?> get props => [error];
+}
+
+class FilePicked extends CarState {
+  final File? file;
+
+  FilePicked(this.file);
+
+  @override
+  List<Object?> get props => [file];
 }

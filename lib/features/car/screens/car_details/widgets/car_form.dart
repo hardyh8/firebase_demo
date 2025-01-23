@@ -10,6 +10,7 @@ import '../../../../../utils/widgets/inputs/input_field_1.dart';
 import '../../../../../utils/widgets/progress_bar.dart';
 import '../../../data/models/car_data.dart';
 import '../../../domain/car_bloc/car_bloc.dart';
+import 'network_image_sheet.dart';
 
 class CarForm extends StatefulWidget {
   const CarForm({
@@ -44,6 +45,7 @@ class _CarFormState extends State<CarForm> {
   bool _hasPurchased = false;
 
   final ImagePicker _picker = ImagePicker();
+  String selectedNetworkUrl = '';
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -76,6 +78,7 @@ class _CarFormState extends State<CarForm> {
       modelController.text = widget.initialData!.modelName;
       modelNoController.text = widget.initialData!.modelNo.toString();
       priceController.text = widget.initialData!.price.toString();
+      selectedNetworkUrl = widget.initialData!.imgUrl;
     }
     super.initState();
   }
@@ -104,14 +107,13 @@ class _CarFormState extends State<CarForm> {
                     fit: BoxFit.cover,
                   ),
                 )
-              else if (widget.initialData?.imgUrl != null &&
-                  widget.initialData!.imgUrl.isNotEmpty)
+              else if (selectedNetworkUrl.isNotEmpty)
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Stack(
                     children: [
                       Image.network(
-                        widget.initialData!.imgUrl,
+                        selectedNetworkUrl,
                         width: double.infinity,
                         height: 200,
                         fit: BoxFit.cover,
@@ -125,7 +127,7 @@ class _CarFormState extends State<CarForm> {
                             shape: BoxShape.circle,
                           ),
                           child: IconButton(
-                            onPressed: _pickImage,
+                            onPressed: showNetworkImages,
                             icon: const Icon(
                               Icons.edit,
                               color: AppColors.white,
@@ -138,7 +140,7 @@ class _CarFormState extends State<CarForm> {
                 )
               else
                 GestureDetector(
-                  onTap: _pickImage,
+                  onTap: showNetworkImages,
                   child: Container(
                     width: double.infinity,
                     height: 200,
@@ -200,6 +202,26 @@ class _CarFormState extends State<CarForm> {
           ),
         ),
       ),
+    );
+  }
+
+  void showNetworkImages() {
+    showModalBottomSheet<NetworkImageSheet>(
+      barrierColor: AppColors.grey1.withAlpha(200),
+      context: context,
+      builder: (context) {
+        return NetworkImageSheet(
+          onSelectImage: (p0) {
+            if (p0.isEmpty) {
+              _pickImage();
+            } else {
+              setState(() {
+                selectedNetworkUrl = p0;
+              });
+            }
+          },
+        );
+      },
     );
   }
 }

@@ -30,28 +30,27 @@ class CustomSnackbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color bgColor = Colors.black.withAlpha(200);
+    Color bgColor = Colors.black.withAlpha(150);
     switch (type) {
       case SnackbarType.sucess:
-        bgColor = Colors.green.withAlpha(200);
-        throw UnimplementedError();
+        bgColor = Colors.green.withAlpha(150);
       case SnackbarType.error:
-        bgColor = Colors.red.withAlpha(200);
-        throw UnimplementedError();
+        bgColor = Colors.red.withAlpha(150);
       case SnackbarType.info:
-        bgColor = Colors.black.withAlpha(200);
+        bgColor = Colors.black.withAlpha(150);
     }
     return Container(
-      margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(10),
       ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Text(
         message,
         style: const TextStyle(
           fontSize: 14,
           color: Colors.white,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );

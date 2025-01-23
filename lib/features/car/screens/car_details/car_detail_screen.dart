@@ -54,14 +54,16 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            editingForm = !editingForm;
-          });
-        },
-        child: const Icon(Icons.edit),
-      ),
+      floatingActionButton: editingForm
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  editingForm = !editingForm;
+                });
+              },
+              child: const Icon(Icons.edit),
+            ),
     );
   }
 
