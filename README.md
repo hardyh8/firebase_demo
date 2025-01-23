@@ -44,7 +44,7 @@ Welcome to the **Firebase Demo Project**, a comprehensive example app built with
    - Enable Authentication, Firestore Database, and Firebase Storage.
 3. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/firebase-demo-flutter.git
+   git clone https://github.com/hardyh8/firebase_demo.git
    ```
 
 ### 🛠️ Installation
